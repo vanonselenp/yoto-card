@@ -1,5 +1,6 @@
 """Command-line interface for yoto-card."""
 
+import sys
 from pathlib import Path
 
 import click
@@ -61,7 +62,7 @@ def main(
                 fg="red",
                 err=True,
             )
-            raise click.Exit(1)  # type: ignore[operator]
+            sys.exit(1)
 
         quality_int = int(quality)
 
@@ -86,7 +87,7 @@ def main(
 
         # Exit with appropriate code
         if result.failed_downloads > 0 and not continue_on_error:
-            raise click.Exit(1)  # type: ignore[operator]
+            sys.exit(1)
 
         click.echo()
         msg = (
@@ -97,14 +98,14 @@ def main(
 
     except YotoCardError as e:
         click.secho(f"Error: {e}", fg="red", err=True)
-        raise click.Exit(1) from e  # type: ignore[operator]
+        sys.exit(1)
     except Exception as e:
         click.secho(f"Unexpected error: {e}", fg="red", err=True)
         if verbose:
             import traceback
 
             traceback.print_exc()
-        raise click.Exit(1) from e  # type: ignore[operator]
+        sys.exit(1)
 
 
 if __name__ == "__main__":
